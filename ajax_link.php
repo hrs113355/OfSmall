@@ -10,7 +10,11 @@
           $result = mysql_query('SELECT `ofsmall_origin`.text, `ofsmall_reply`.text, `ofsmall_link`.ip FROM `ofsmall_link` inner join `ofsmall_origin` on `ofsmall_link`.origin_id = `ofsmall_origin`.id inner join `ofsmall_reply` on `ofsmall_link`.reply_id = `ofsmall_reply`.id order by `ofsmall_link`.id desc');
           while ($record = mysql_fetch_array($result, MYSQL_NUM))
 	  {
-	      echo "<li> $record[0] ";
+	      echo "<li>";
+	      if ($record[0] == "<預設值>")
+		  echo "<span style='color: red; font-weight: bold;'>$record[0]</span>";
+	      else
+		  echo $record[0];
 	      print_arrow();
 	      echo $record[1];
 	      if ($record[2] != "")
