@@ -5,13 +5,48 @@
 <?php
 	include 'mysql_connect.php';
 
-	if ($_GET['content'] == '' or strlen($_GET['content']) <= 0)
-	    die('no');
-
-	$content = mysql_escape_string($_GET['content']);
+	$reply = $_GET['reply'];
+	$origin = $_GET['origin'];
 	$ip = mysql_escape_string($_SERVER['REMOTE_ADDR']);
 
-	$sql = 'insert into `ofsmall_reply` (`text`, `ip`) values (\''.$content.'\', \'' . $ip . '\')';
+	if (($reply == '' or strlen($reply) <= 0) or ($origin == '' or strlen($origin) <= 0))
+	    die('no');
+
+	$origin_id = '';
+	$reply_id = '';
+
+	$result = mysql_query("SELECT `id` FROM `ofsmall_origin` where `text`='$origin'");
+        if ($record = mysql_fetch_array($result, MYSQL_NUM))
+	    $origin_id = $record[0];
+	else
+	{
+	    $sql = 'insert into `ofsmall_origin` (`text`, `ip`) values (\''.$origin.'\', \'' . $ip . '\')';
+	    mysql_query($sql);
+
+	    $result = mysql_query("SELECT `id` FROM `ofsmall_origin` where `text`='$origin'");
+	    if ($record = mysql_fetch_array($result, MYSQL_NUM))
+	    {
+		$origin_id = $record[0];
+	    }
+	}
+
+	$result = mysql_query("SELECT `id` FROM `ofsmall_reply` where `text`='$reply'");
+        if ($record = mysql_fetch_array($result, MYSQL_NUM))
+	    $reply_id = $record[0];
+	else
+	{
+	    $sql = 'insert into `ofsmall_reply` (`text`, `ip`) values (\''.$reply.'\', \'' . $ip . '\')';
+	    mysql_query($sql);
+
+	    $result = mysql_query("SELECT `id` FROM `ofsmall_reply` where `text`='$reply'");
+	    if ($record = mysql_fetch_array($result, MYSQL_NUM))
+	    {
+		$reply_id = $record[0];
+	    }
+	}
+
+	$sql = "insert into `ofsmall_link` (`origin_id`, `reply_id`, `ip`) values ($origin_id, $reply_id, '$ip')";
+	print $sql;
 	mysql_query($sql);
 ?>
 </html>
