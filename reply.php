@@ -19,6 +19,7 @@
 
 <script type="text/javascript">
 setTimeout("refresh_list();", 15000);
+update_limit();
 function update_limit()
 {
     $("#rest_length").html((140 - $("#input-box").val().length));

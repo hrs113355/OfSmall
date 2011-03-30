@@ -15,10 +15,9 @@
 <?php $page_name = ' - 關鍵字/回應對應表'; ?>
 <?php include 'header.php'; ?>
 <script type="text/javascript" src="js/jquery-autocomplete/jquery.autocomplete.js"></script>
-<p>請建立<b>『小的機器人』</b>對於『關鍵字』和『回應』的連結: <br>
+<p>請建立<b>『小的機器人』</b>對於『關鍵字』和『回應』的連結 (分別輸入『關鍵字』和相對應的『回應』，會自動帶出系統現有的辭彙,輸入完畢按 Enter): <br>
 關鍵字：<input type="text" size="145" id="origin_input-box" maxlength="140"><span id="origin_rest_length"></span><br />
 回應：<input type="text" size="145" id="reply_input-box" maxlength="140"><span id="reply_rest_length"></span>
-<img style="float:right;" src="images/plurk.png" id="plurk" /><br />
 
 <hr>
 目前資料庫中的關鍵字<?php print_arrow(); ?>回應：
@@ -27,6 +26,8 @@
 
 <script type="text/javascript">
 setTimeout("refresh_list();", 15000);
+reply_update_limit();
+origin_update_limit();
 function origin_update_limit()
 {
     $("#origin_rest_length").html((140 - $("#origin_input-box").val().length));
