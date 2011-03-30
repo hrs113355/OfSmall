@@ -12,13 +12,13 @@
 	  {
 	      echo "<li>";
 	      if ($record[0] == "<預設值>")
-		  echo "<span style='color: red; font-weight: bold;'>$record[0]</span>";
+		  echo "<span style='color: red; font-weight: bold;'>".htmlspecialchars($record[0])."</span>";
 	      else
-		  echo $record[0];
+		  echo htmlspecialchars($record[0]);
 	      print_arrow();
-	      echo $record[1];
+	      echo htmlspecialchars($record[1]);
 	      if ($record[2] != "")
-		echo "<span style='color: gray'><em>-- from $record[2] </em> </span>";
+		echo "<span style='color: gray'><em>-- from ".htmlspecialchars($record[2])." </em> </span>";
 	      echo "</li>\n";
 	  }
 ?>
