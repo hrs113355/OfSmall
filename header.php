@@ -3,8 +3,8 @@
 
 <a href="index.php">首頁</a>
 <a href="reply.php">回應資料庫</a>
-<a href="origin.php">學習資料列表</a>
-<a href="link.php">學習資料與回應對應</a>
+<a href="origin.php">觸發關鍵字列表</a>
+<a href="link.php">關鍵字/回應連結表</a>
 <a href="http://plurk.com/ofsmall">噗浪頁面</a>
 
 <hr>
