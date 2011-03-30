@@ -5,7 +5,7 @@
     </head>
 
 <body onload="refresh_list()">
-<?php $page_name = ' - 回應資料庫'; ?>
+<?php $page_name = ' - 回應列表'; ?>
 <?php include 'header.php'; ?>
 
 
@@ -18,6 +18,7 @@
 </p>
 
 <script type="text/javascript">
+setTimeout("refresh_list();", 15000);
 function update_limit()
 {
     $("#rest_length").html((140 - $("#input-box").val().length));
@@ -27,7 +28,6 @@ function refresh_list()
     $.ajax({
 	url: 'ajax_reply.php',
 	    error: function(xhr) {
-		alert('Ajax request 發生錯誤');
 	    },
 		success: function(response) {
 		    $('#list').html(response);

@@ -18,6 +18,7 @@
 </p>
 
 <script type="text/javascript">
+setTimeout("refresh_list();", 15000);
 function update_limit()
 {
     $("#rest_length").html((140 - $("#input-box").val().length));
@@ -27,7 +28,6 @@ function refresh_list()
     $.ajax({
 	url: 'ajax_origin.php',
 	    error: function(xhr) {
-		alert('Ajax request 發生錯誤');
 	    },
 		success: function(response) {
 		    $('#list').html(response);
