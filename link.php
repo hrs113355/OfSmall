@@ -52,16 +52,20 @@ function send_content(event)
     if (event.keyCode != '13')
 	return true;
 
+    if ($("#origin_input-box").val().length == 0 || $("#reply_input-box").val().length == 0)
+	return true;
+    
     $.ajax({
-	url: 'ajax_send_origin.php',
-	    data: {content: $("#input-box").val()},
+	url: 'ajax_send_link.php',
+	    data: {origin: $("#origin_input-box").val(), reply:  $("#reply_input-box").val()},
 	    error: function(xhr) {
 		alert('Ajax request 發生錯誤');
 		$(e.target).attr('disabled', false);
 	    },
 		success: function(response) {
 		    refresh_list();
-		    $("#input-box").val("");
+		    $("#origin_input-box").val("");
+		    $("#reply_input-box").val("");
 		}
     });
 }
