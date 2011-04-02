@@ -14,6 +14,7 @@
 <p>
 由於目前的資料量不足以用來 training ，於是本計劃打算使用不同的回應模式。但還是請協助我們建立資料庫：
 <ul>
+<li><a href="link.php">關鍵字和回噗的連結</a></li>
 <li><a href="reply.php">回應內容資料庫</a></li>
 <li><a href="origin.php">觸發的關鍵字資料庫</a></li>
 </ul>
