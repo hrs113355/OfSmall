@@ -3,4 +3,8 @@
     $db_user = '';
     $db_pass = '';
     $db_name = '';
+
+    $plurk_api_key = '';
+    $plurk_username = '';
+    $plurk_password = '';
 ?>
