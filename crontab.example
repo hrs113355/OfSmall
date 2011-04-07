@@ -1,1 +1,1 @@
-0 */5 * * * /usr/local/bin/php /home/hrs/www/ofsmall/bot/bot_autopost.php
+0 */5 * * * /usr/local/bin/php PROJECT_FOLDER/bot/bot_autopost.php
