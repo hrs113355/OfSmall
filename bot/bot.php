@@ -23,10 +23,10 @@
 		print $p->content_raw . "\n";
 		print $p->response_count . "\n";
 		print $p->no_comments . "\n";
-		print ($posted = date('Y-m-d\TH:i:s', strtotime($p->posted)))."\n\n";
+		print ($posted = date('Y-m-d\TH:i:s', strtotime($p->posted)))."\n";
 		$reply = getReply($p->content_raw, $p->response_count);
 
-		print ($reply);
+		print "===> $reply\n\n";
 
 		$plurk->add_response($p->plurk_id, $reply, 'says');
 		logThis($p->plurk_id, $p->content_raw, $reply, $p->response_count, $p->no_comments, $posted);
@@ -76,24 +76,25 @@
 	{
 	    global $all_origins;
 	    global $default_origins;
+	    $reply_queue = array();
 
 	    if ($count == 4)
 		return '小的誠惶誠恐地來搶大大的五樓了(worship)';
 
-	// TODO: get Youtube content
-	//    if ($origins like '想聽' $origins like '點播')
-	//	return Youtube($origin);
-
-	    $reply_queue = array();
-	    foreach ($all_origins as $o)
+	    if (($pos = mb_strpos($origin, '想聽', 0, 'UTF-8') !== false) || ($pos = mb_strpos($origin, '點播', 0, 'UTF-8') !== false))
+	    	    $reply_queue = Youtube(mb_substr($origin, $pos + 1, 200, 'UTF-8'));
+	    else
 	    {
-		if (strpos($origin, $o->origin) !== false)
-		    array_push($reply_queue, $o);
-	    }
+		foreach ($all_origins as $o)
+		{
+		    if (strpos($origin, $o->origin) !== false)
+			array_push($reply_queue, $o);
+		}
 
-	    if (count($reply_queue) == 0)
-	    {
-		$reply_queue = $default_origins;
+		if (count($reply_queue) == 0)
+		{
+		    $reply_queue = $default_origins;
+		}
 	    }
 	    $random = rand(0, count($reply_queue) - 1);
 	    if ($random >= 0)
@@ -110,17 +111,47 @@
 	    mysql_query($sql);
 	}
 
-    // TODO: use offset
-    /*
+	function Youtube($q)
+	{
+	    $ret = array();
+
+	    $q = urlencode($q);
+	    print $q;
+	    $url = "http://gdata.youtube.com/feeds/api/videos?q=$q&max-results=3&v=2&format=5&category=Music";
+
+	    $fp = fopen($url, 'r');
+
+	    $data = '';
+	    while ($buf = fgets($fp, 1024))
+		$data = $data.$buf;
+
+	    preg_match_all("/<link rel='alternate' type='text\/html' href='(.*?)&amp;feature=youtube_gdata'\/>/", $data, $match);
+
+	    $x = 0;
+	    $adverb = array('必恭必敬地', '內牛滿面地', '誠惶誠恐地', '感激不盡地');
+	    foreach($match[1] as $m)
+		if ($x++ != 0)
+		{
+		    $o->reply = "小的". $adverb[rand(0, count($adverb) - 1)]."為大大獻上一曲: $m";
+		    array_push($ret, $o);
+		}
+	    if (count($ret) == 0)
+	    {
+		$o->reply = '大大抱歉, 小的無能為您找到想要聽的音樂:(';
+		array_push($ret, $o);
+	    }
+
+	    return $ret;
+	}
+
 	function getOffset()
 	{
 	  $sql = "SELECT `posted` FROM `ofsmall_log` order by id desc limit 1";
           $result = mysql_query($sql);
 	  if ($record = mysql_fetch_array($result, MYSQL_NUM))
-	      return $record[0];
+	      return $record[0].'+00:00';
 	  else
 	      return NULL;
 	}
-     */
 
 ?>
