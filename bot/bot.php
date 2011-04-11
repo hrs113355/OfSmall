@@ -13,7 +13,7 @@
 	origins_init();
 
 	echo "\n\n ----- get plurks ----- \n";
-	$ret =  $plurk->get_plurks(NULL, 20, NULL, NULL, NULL);
+	$ret =  $plurk->get_plurks(NULL, 10, NULL, NULL, NULL);
 
 	foreach ($ret->plurks as $p)
 	{
@@ -25,6 +25,8 @@
 		print $p->no_comments . "\n";
 		print ($posted = date('Y-m-d\TH:i:s', strtotime($p->posted)))."\n";
 		$reply = getReply($p->content_raw, $p->response_count);
+
+		$reply = str_replace('(worship)', ' http://ppt.cc/GdjX#.jpg ', $reply);
 
 		print "===> $reply\n\n";
 
@@ -116,8 +118,8 @@
 	    $ret = array();
 
 	    $q = urlencode($q);
-	    print $q;
-	    $url = "http://gdata.youtube.com/feeds/api/videos?q=$q&max-results=3&v=2&format=5&category=Music";
+	    print $q."\n";
+	    $url = "http://gdata.youtube.com/feeds/api/videos?q=$q&max-results=2&v=2&format=5&category=Music";
 
 	    $fp = fopen($url, 'r');
 
@@ -128,7 +130,7 @@
 	    preg_match_all("/<link rel='alternate' type='text\/html' href='(.*?)&amp;feature=youtube_gdata'\/>/", $data, $match);
 
 	    $x = 0;
-	    $adverb = array('必恭必敬地', '內牛滿面地', '誠惶誠恐地', '感激不盡地');
+	    $adverb = array('畢恭畢敬地', '內牛滿面地', '誠惶誠恐地', '感激不盡地', '煞气地', '五體投地地', '心花怒放地');
 	    foreach($match[1] as $m)
 		if ($x++ != 0)
 		{
@@ -137,8 +139,8 @@
 		}
 	    if (count($ret) == 0)
 	    {
-		$o->reply = '大大抱歉, 小的無能為您找到想要聽的音樂:(';
-		array_push($ret, $o);
+		    $o->reply = '大大抱歉, 小的無能為您找到想要聽的音樂(yay)';
+		    array_push($ret, $o);
 	    }
 
 	    return $ret;
