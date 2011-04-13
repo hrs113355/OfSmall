@@ -10,6 +10,8 @@
 	$all_origins = array();
 	$default_origins = array();
 
+while(1)
+{
 	origins_init();
 
 	echo "\n\n ----- get plurks ----- \n";
@@ -23,9 +25,16 @@
 		print $p->content_raw . "\n";
 		print $p->response_count . "\n";
 		print $p->no_comments . "\n";
+		print getResponseRate($p->owner_id)."\n";
 		print ($posted = date('Y-m-d\TH:i:s', strtotime($p->posted)))."\n";
-		$reply = getReply($p->content_raw, $p->response_count);
+		$reply = getReply($p->content_raw, $p->response_count, $p->owner_id);
 
+		if ($reply === false)
+		{
+			print "===> 回噗率設定 => skip\n";
+			logThis($p->plurk_id, $p->content_raw, '(skip)', $p->response_count, $p->no_comments, $posted);
+			continue;
+		}
 		$reply = str_replace('(worship)', ' http://ppt.cc/GdjX#.jpg ', $reply);
 
 		print "===> $reply\n\n";
@@ -34,7 +43,8 @@
 		logThis($p->plurk_id, $p->content_raw, $reply, $p->response_count, $p->no_comments, $posted);
 	    }
 	}
-
+	sleep(10);
+}
 	function isRepeat($plurkid)
 	{
 	  $sql = "SELECT `id` FROM `ofsmall_log` where `plurk_id`=$plurkid";
@@ -74,14 +84,21 @@
 	}
 
 
-	function getReply($origin, $count)
+	function getReply($origin, $count, $user_id)
 	{
 	    global $all_origins;
 	    global $default_origins;
 	    $reply_queue = array();
 
+	    if (($pos = mb_strpos($origin, '小的回噗率', 0, 'UTF-8')) !== false)
+		return responseRate(mb_substr($origin, $pos + 5, 200, 'UTF-8'), $user_id);
+
+	    if (rand(0, 99) >= getResponseRate($user_id))
+		return false;
+	    
 	    if ($count == 4)
 		return '小的誠惶誠恐地來搶大大的五樓了(worship)';
+	    
 
 	    if (($pos = mb_strpos($origin, '想聽', 0, 'UTF-8') !== false) || ($pos = mb_strpos($origin, '點播', 0, 'UTF-8') !== false))
 	    	    $reply_queue = Youtube(mb_substr($origin, $pos + 1, 200, 'UTF-8'));
@@ -119,7 +136,7 @@
 
 	    $q = urlencode($q);
 	    print $q."\n";
-	    $url = "http://gdata.youtube.com/feeds/api/videos?q=$q&max-results=2&v=2&format=5&category=Music";
+	    $url = "http://gdata.youtube.com/feeds/api/videos?q=$q&lr=zh-Hant&max-results=3&v=2&format=5";
 
 	    $fp = fopen($url, 'r');
 
@@ -141,10 +158,34 @@
 	    {
 		    $o->reply = '大大抱歉, 小的無能為您找到想要聽的音樂(yay)';
 		    array_push($ret, $o);
+	    }else {
+	    print_r($ret);
 	    }
 
 	    return $ret;
 	}
+
+	function responseRate($rate, $user_id)
+	{
+		$rate = intval($rate);
+	//	print "=> $rate, $user_id\n";
+		if ($rate < 0 || $rate > 100)
+			return '大大輸入的數字有誤喔! 請再試試 (worship)';
+		$sql = "INSERT INTO ofsmall_rate (rate, user_id) VALUES($rate, $user_id)";
+		if (mysql_query($sql))
+			return '好的!小的謹遵大大教誨!(code)已經將回噗率設定成'.$rate.'%';
+	}
+
+	function getResponseRate($user_id)
+	{
+		$sql = "SELECT rate FROM ofsmall_rate WHERE user_id=$user_id order by id desc";
+		$rs = mysql_query($sql);
+		if ($r = mysql_fetch_array($rs, MYSQL_NUM))
+			return $r[0];
+		else
+			return 100;
+	}
+		
 
 	function getOffset()
 	{
