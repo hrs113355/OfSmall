@@ -5,8 +5,8 @@
 <?php
 	include 'mysql_connect.php';
 
-	$reply = $_GET['reply'];
-	$origin = $_GET['origin'];
+	$reply = mysql_escape_string($_GET['reply']);
+	$origin = mysql_escape_string($_GET['origin']);
 	$ip = mysql_escape_string($_SERVER['REMOTE_ADDR']);
 
 	if (($reply == '' or strlen($reply) <= 0) or ($origin == '' or strlen($origin) <= 0))
