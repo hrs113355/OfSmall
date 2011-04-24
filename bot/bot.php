@@ -35,6 +35,12 @@ while(1)
 			logThis($p->plurk_id, $p->content_raw, '(skip)', $p->response_count, $p->no_comments, $posted);
 			continue;
 		}
+		else if ($reply == '')
+		{
+			print 'skip';
+			logThis($p->plurk_id, $p->content_raw, '(skip)', $p->response_count, $p->no_comments, $posted);
+			continue;
+		}
 		$reply = str_replace('(worship)', ' http://ppt.cc/GdjX#.jpg ', $reply);
 
 		print "===> $reply\n\n";
@@ -43,7 +49,7 @@ while(1)
 		logThis($p->plurk_id, $p->content_raw, $reply, $p->response_count, $p->no_comments, $posted);
 	    }
 	}
-	sleep(10);
+	sleep(20);
 }
 	function isRepeat($plurkid)
 	{
@@ -99,6 +105,8 @@ while(1)
 	    if ($count == 4)
 		return '小的誠惶誠恐地來搶大大的五樓了(worship)';
 	    
+	    if ($count == 2)
+		return '樓上動作好快... 小的都沒搶到頭香 :(';
 
 	    if (($pos = mb_strpos($origin, '想聽', 0, 'UTF-8') !== false) || ($pos = mb_strpos($origin, '點播', 0, 'UTF-8') !== false))
 	    	    $reply_queue = Youtube(mb_substr($origin, $pos + 1, 200, 'UTF-8'));
