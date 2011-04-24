@@ -19,7 +19,7 @@ while(1)
 
 	foreach ($ret->plurks as $p)
 	{
-	    if (!(isRepeat($p->plurk_id)) && !($p->no_comments))
+	    if (!(isRepeat($p->plurk_id)))
 	    {
 		print $p->plurk_id . "\n";
 		print $p->content_raw . "\n";
