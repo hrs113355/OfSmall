@@ -41,7 +41,7 @@ while(1)
 			logThis($p->plurk_id, $p->content_raw, '(skip)', $p->response_count, $p->no_comments, $posted);
 			continue;
 		}
-		$reply = str_replace('(worship)', ' http://ppt.cc/GdjX#.jpg ', $reply);
+#		$reply = str_replace('(worship)', 'http://ppt.cc/5aBg#.gif', $reply);
 
 		print "===> $reply\n\n";
 
@@ -105,9 +105,6 @@ while(1)
 	    if ($count == 4)
 		return '小的誠惶誠恐地來搶大大的五樓了(worship)';
 	    
-	    if ($count == 1)
-		return '樓上動作好快... 小的都沒搶到頭香 :(';
-
 	    if (mb_strpos($origin, '想聽', 0, 'UTF-8') !== false)
 	    {
 		$parseY = preg_split('/想聽/', $origin);
