@@ -19,7 +19,7 @@ while(1)
 
 	foreach ($ret->plurks as $p)
 	{
-	    if (!(isRepeat($p->plurk_id)) && !($p->no_comments))
+	    if (!(isRepeat($p->plurk_id)))
 	    {
 		print $p->plurk_id . "\n";
 		print $p->content_raw . "\n";
@@ -105,11 +105,21 @@ while(1)
 	    if ($count == 4)
 		return '小的誠惶誠恐地來搶大大的五樓了(worship)';
 	    
-	    if ($count == 2)
+	    if ($count == 1)
 		return '樓上動作好快... 小的都沒搶到頭香 :(';
 
-	    if (($pos = mb_strpos($origin, '想聽', 0, 'UTF-8') !== false) || ($pos = mb_strpos($origin, '點播', 0, 'UTF-8') !== false))
-	    	    $reply_queue = Youtube(mb_substr($origin, $pos + 1, 200, 'UTF-8'));
+	    if (mb_strpos($origin, '想聽', 0, 'UTF-8') !== false)
+	    {
+		$parseY = preg_split('/想聽/', $origin);
+		print ($parseY[count($parseY) - 1]);
+		 $reply_queue = Youtube($parseY[count($parseY) - 1]);
+	    }
+	    else if ($pos = mb_strpos($origin, '點播', 0, 'UTF-8') !== false)
+	    {
+		$parseY = preg_split('/點播/', $origin);
+		print ($parseY[count($parseY) - 1]);
+		$reply_queue = Youtube($parseY[count($parseY) - 1]);
+	    }
 	    else
 	    {
 		foreach ($all_origins as $o)
@@ -144,7 +154,7 @@ while(1)
 
 	    $q = urlencode($q);
 	    print $q."\n";
-	    $url = "http://gdata.youtube.com/feeds/api/videos?q=$q&lr=zh-Hant&max-results=3&v=2&format=5";
+	    $url = "http://gdata.youtube.com/feeds/api/videos?q=$q&max-results=2&v=2";
 
 	    $fp = fopen($url, 'r');
 
@@ -159,6 +169,7 @@ while(1)
 	    foreach($match[1] as $m)
 		if ($x++ != 0)
 		{
+		    print "==Youtube=> $m\n";
 		    $o->reply = "小的". $adverb[rand(0, count($adverb) - 1)]."為大大獻上一曲: $m";
 		    array_push($ret, $o);
 		}
