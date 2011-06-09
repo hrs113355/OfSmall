@@ -9,21 +9,24 @@
     <meta charset="utf-8">
     <title> OfSmall - 小的 1.0 [首頁] </title>
     <link rel="stylesheet" type="text/css" href="js/jquery-autocomplete/jquery.autocomplete.css">
+    <link type="text/css" rel="stylesheet" href="style/style.css" /> 
     </head>
 
 <body onload="refresh_list()">
+<div id="main">
 <?php $page_name = ' - 關鍵字/回應對應表'; ?>
 <?php include 'header.php'; ?>
 <script type="text/javascript" src="js/jquery-autocomplete/jquery.autocomplete.js"></script>
 <p>請建立<b>『小的機器人』</b>對於『關鍵字』和『回應』的連結 (分別輸入『關鍵字』和相對應的『回應』，會自動帶出系統現有的辭彙,輸入完畢按 Enter): <br>
 <span style="font-weight: bold; color: red">注意: 請不要加入具有針對性的關鍵字，否則會考慮封 IP 或直接永久關閉編輯功能</span><br>
-關鍵字：<input type="text" size="145" id="origin_input-box" maxlength="140"><span id="origin_rest_length"></span><br />
-回應：<input type="text" size="145" id="reply_input-box" maxlength="140"><span id="reply_rest_length"></span>
+關鍵字：<input type="text" size="120" id="origin_input-box" maxlength="140"><span id="origin_rest_length"></span><br />
+回應：<input type="text" size="120" id="reply_input-box" maxlength="140"><span id="reply_rest_length"></span>
 
 <hr>
 目前資料庫中的關鍵字<?php print_arrow(); ?>回應：
 <span id="list"></span>
 </p>
+</div>
 
 <script type="text/javascript">
 setTimeout("refresh_list();", 15000);
