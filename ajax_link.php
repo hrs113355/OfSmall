@@ -12,11 +12,11 @@
 	  {
 	      echo "<li>";
 	      if ($record[0] == "<預設值>")
-		  echo "<span style='color: red; font-weight: bold;'>".htmlspecialchars($record[0])."</span>";
+		  echo "<span style='color: red; font-weight: bold;' class='origin_word-d'>".htmlspecialchars($record[0])."</span>";
 	      else
-		  echo htmlspecialchars($record[0]);
+		  echo "<span class='origin_word'>".htmlspecialchars($record[0])."</span>";
 	      print_arrow();
-	      echo htmlspecialchars($record[1]);
+	      echo "<span class='reply_word'>".htmlspecialchars($record[1])."</span>";
 	      if ($record[2] != "")
 		echo "<span style='color: gray'><em>-- from ".htmlspecialchars($record[2])." </em> </span>";
 	      echo "</li>\n";

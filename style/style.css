@@ -1,0 +1,38 @@
+h1 { 
+	text-align: center;
+}
+body {
+    width: 100%;
+    font-family: 微軟正黑體;
+    overflow-x: hidden;
+    background: url('../images/body-bg.png') repeat;
+}
+div {
+    margin: 0 auto;
+  /*  text-align: center; */
+    font-family: 微軟正黑體;
+}
+div#header {
+    text-align: center;
+}   
+div#header a{
+    margin-left: 50px;
+    margin-right: 50px;
+}
+div#main {
+    width: 800px;
+    padding: 50px 50px 50px 50px;
+    background: #FFF;
+}
+a:visited, a:hover, a:link, a:active {
+    color: #254C62 !important; 
+    border: none;
+    outline: none; 
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+div#shares{
+	float: right;
+}
