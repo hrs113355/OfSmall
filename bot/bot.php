@@ -15,7 +15,7 @@ while(1)
 	origins_init();
 
 	echo "\n\n - get plurks - \n";
-	$ret =  $plurk->get_plurks(NULL, 10, NULL, NULL, NULL);
+	$ret =  $plurk->get_plurks(NULL, 30, NULL, NULL, NULL);
 
 	foreach ($ret->plurks as $p)
 	{
@@ -102,7 +102,7 @@ while(1)
 	    if (($pos = mb_strpos($origin, '世界線變動率', 0, 'UTF-8')) !== false)
 		return responseRate(mb_substr($origin, $pos + 6, 200, 'UTF-8'), $user_id, 2);
 
-	    if (($pos = mb_strpos($origin, '幫我查', 0, 'UTF-8')) !== false)
+	    if (($pos = mb_strpos($origin, '幫我查', 0, 'UTF-8')) !== false || ($pos = mb_strpos($origin, '幫我找', 0, 'UTF-8')) !== false)
 		return googleForYou(mb_substr($origin, $pos + 3, 200, 'UTF-8'));
 
 	    if (mb_strpos($origin, '想聽', 0, 'UTF-8') !== false)
