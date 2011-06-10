@@ -14,7 +14,7 @@ while(1)
 {
 	origins_init();
 
-	echo "\n\n ----- get plurks ----- \n";
+	echo "\n\n - get plurks - \n";
 	$ret =  $plurk->get_plurks(NULL, 10, NULL, NULL, NULL);
 
 	foreach ($ret->plurks as $p)
@@ -41,7 +41,7 @@ while(1)
 			logThis($p->plurk_id, $p->content_raw, '(skip)', $p->response_count, $p->no_comments, $posted);
 			continue;
 		}
-		$reply = str_replace('(worship)', ' http://ppt.cc/GdjX#.jpg ', $reply);
+#		$reply = str_replace('(worship)', 'http://ppt.cc/5aBg#.gif', $reply);
 
 		print "===> $reply\n\n";
 
@@ -97,46 +97,62 @@ while(1)
 	    $reply_queue = array();
 
 	    if (($pos = mb_strpos($origin, '小的回噗率', 0, 'UTF-8')) !== false)
-		return responseRate(mb_substr($origin, $pos + 5, 200, 'UTF-8'), $user_id);
+		return responseRate(mb_substr($origin, $pos + 5, 200, 'UTF-8'), $user_id, 1);
 
-	    if (rand(0, 99) >= getResponseRate($user_id))
-		return false;
-	    
-	    if ($count == 4)
-		return '小的誠惶誠恐地來搶大大的五樓了(worship)';
-	    
-	    if ($count == 1)
-		return '樓上動作好快... 小的都沒搶到頭香 :(';
+	    if (($pos = mb_strpos($origin, '世界線變動率', 0, 'UTF-8')) !== false)
+		return responseRate(mb_substr($origin, $pos + 6, 200, 'UTF-8'), $user_id, 2);
+
+	    if (($pos = mb_strpos($origin, '幫我查', 0, 'UTF-8')) !== false)
+		return googleForYou(mb_substr($origin, $pos + 3, 200, 'UTF-8'));
 
 	    if (mb_strpos($origin, '想聽', 0, 'UTF-8') !== false)
 	    {
 		$parseY = preg_split('/想聽/', $origin);
 		print ($parseY[count($parseY) - 1]);
 		 $reply_queue = Youtube($parseY[count($parseY) - 1]);
+		 $random = rand(0, count($reply_queue) - 1);
+		 if ($random >= 0)
+			 return $reply_queue[$random]->reply;
 	    }
 	    else if ($pos = mb_strpos($origin, '點播', 0, 'UTF-8') !== false)
 	    {
 		$parseY = preg_split('/點播/', $origin);
 		print ($parseY[count($parseY) - 1]);
 		$reply_queue = Youtube($parseY[count($parseY) - 1]);
+		$random = rand(0, count($reply_queue) - 1);
+		if ($random >= 0)
+			return $reply_queue[$random]->reply;
 	    }
-	    else
-	    {
-		foreach ($all_origins as $o)
-		{
-		    if (strpos($origin, $o->origin) !== false)
-			array_push($reply_queue, $o);
-		}
 
-		if (count($reply_queue) == 0)
-		{
+	    if (rand(0, 99) >= getResponseRate($user_id))
+		return false;
+	    
+	    if ($count == 2)
+		return '小的來搶三樓了(worship)';
+
+	    if ($count == 4)
+		return '小的誠惶誠恐地來搶大大的五樓了(worship)';
+	    
+
+	    foreach ($all_origins as $o)
+	    {
+		    if (strpos($origin, $o->origin) !== false)
+			    array_push($reply_queue, $o);
+	    }
+
+	    if (count($reply_queue) == 0)
+	    {
 		    $reply_queue = $default_origins;
-		}
 	    }
 	    $random = rand(0, count($reply_queue) - 1);
 	    if ($random >= 0)
 		return $reply_queue[$random]->reply;
 	    return false;
+	}
+	
+	function googleForYou($str){
+		$url = urlencode($str);
+		return "大大  http://lmgtfy.com/?q=$url (小的幫您查了\" $str\") :-))";
 	}
 
 	function logThis($plurk_id, $content_raw, $reply, $response_count, $no_comments, $posted)
@@ -184,15 +200,26 @@ while(1)
 	    return $ret;
 	}
 
-	function responseRate($rate, $user_id)
+	function responseRate($rate, $user_id, $type)
 	{
-		$rate = intval($rate);
+		if ($type == 1)
+			$rate = intval($rate);
+		else{
+			$sg_rate = $rate;
+			$rate = doubleval($rate) * 100;
+			$rate = (int)$rate;
+		}
 	//	print "=> $rate, $user_id\n";
 		if ($rate < 0 || $rate > 100)
 			return '大大輸入的數字有誤喔! 請再試試 (worship)';
 		$sql = "INSERT INTO ofsmall_rate (rate, user_id) VALUES($rate, $user_id)";
 		if (mysql_query($sql))
-			return '好的!小的謹遵大大教誨!(code)已經將回噗率設定成'.$rate.'%';
+		{
+			if ($type == 1)
+				return '好的!小的謹遵大大教誨!(code)已經將回噗率設定成'.$rate.'%';
+			else
+				return "好的!小的已經用了 DMail(code) 幫大大將世界線變動率變動為 $sg_rate (回噗率 = $rate %)";
+		}
 	}
 
 	function getResponseRate($user_id)
