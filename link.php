@@ -24,7 +24,7 @@
 
 <hr>
 目前資料庫中的關鍵字<?php print_arrow(); ?>回應：
-<span id="list"></span>
+<div id="list"></div>
 </p>
 </div>
 
@@ -42,6 +42,7 @@ function reply_update_limit()
 }
 function refresh_list()
 {
+    $('#list').html('<img src="images/loading.gif" />');
     $.ajax({
 	url: 'ajax_link.php',
 	    error: function(xhr) {
