@@ -23,9 +23,10 @@ div#main {
     width: 800px;
     padding: 50px 50px 50px 50px;
     background: #FFF;
+    margin-bottom: 30px;
 }
 a:visited, a:hover, a:link, a:active {
-    color: #254C62 !important; 
+    color: #09C !important; 
     border: none;
     outline: none; 
     text-decoration: none;
@@ -35,4 +36,11 @@ a:hover {
 }
 div#shares{
 	float: right;
+}
+img#icon {
+    float: left;
+    margin-right: 20px;
+}
+div#intro {
+    min-height: 270px;
 }
